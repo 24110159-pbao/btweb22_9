@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+
+<html lang="vi"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0">
+
+    <title>IOTSTAR SHOP</title>
+
+    <link
+            rel="stylesheet"
+            th:href="@{/css/app.css}">
+
+</head>
+
+<body>
+
+<div th:replace="~{fragments/header :: header}">
+</div>
+
+<main class="container">
+
+    <div class="panel">
+
+        <h1>
+            Trang chủ
+        </h1>
+
+        <p>
+            Chào mừng đến với IOTSTAR SHOP.
+        </p>
+
+        <div sec:authorize="isAnonymous()">
+
+            <p>
+                Bạn chưa đăng nhập.
+            </p>
+
+            <a
+                    th:href="@{/login}"
+                    class="btn primary">
+
+                Đăng nhập
+
+            </a>
+
+        </div>
+
+        <div sec:authorize="isAuthenticated()">
+
+            <p>
+
+                Bạn đang đăng nhập với tài khoản:
+
+                <strong
+                        th:text="${#authentication.principal.username}">
+                    email
+                </strong>
+
+            </p>
+
+        </div>
+
+    </div>
+
+</main>
+
+</body>
+
+</html>

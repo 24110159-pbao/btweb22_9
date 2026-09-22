@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+
+<html lang="vi"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0">
+
+    <title
+            th:text="${title ?: 'IOTSTAR SHOP'}">
+        IOTSTAR SHOP
+    </title>
+
+    <link
+            rel="stylesheet"
+            th:href="@{/css/app.css}">
+
+</head>
+
+<body>
+
+<div th:replace="~{fragments/header :: header}">
+</div>
+
+<main class="container">
+
+    <div th:replace="${content}">
+    </div>
+
+</main>
+
+<footer class="footer">
+
+    IOTSTAR SHOP © 2026
+
+</footer>
+
+</body>
+
+</html>

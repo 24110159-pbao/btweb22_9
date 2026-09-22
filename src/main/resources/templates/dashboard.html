@@ -1,0 +1,1357 @@
+<!DOCTYPE html> <html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"> <head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard | IOTSTAR SHOP</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family:
+                Inter,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                Roboto,
+                Arial,
+                sans-serif;
+
+            background: #f8fafc;
+            color: #0f172a;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        /* =========================
+           LAYOUT
+        ========================== */
+
+        .app {
+            min-height: 100vh;
+            display: flex;
+        }
+
+        /* =========================
+           SIDEBAR
+        ========================== */
+
+        .sidebar {
+            width: 260px;
+            min-height: 100vh;
+
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+
+            background:
+                linear-gradient(
+                    180deg,
+                    #172554 0%,
+                    #1e3a8a 100%
+                );
+
+            color: white;
+
+            padding: 25px 16px;
+
+            display: flex;
+            flex-direction: column;
+
+            z-index: 100;
+        }
+
+        .brand {
+            padding: 5px 14px 30px;
+
+            font-size: 21px;
+            font-weight: 800;
+
+            letter-spacing: -0.5px;
+        }
+
+        .brand span {
+            color: #93c5fd;
+        }
+
+        .menu-title {
+            padding: 0 14px;
+
+            margin-bottom: 10px;
+
+            color: #93c5fd;
+
+            font-size: 11px;
+
+            font-weight: 700;
+
+            text-transform: uppercase;
+
+            letter-spacing: 1px;
+        }
+
+        .menu {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .menu a {
+            display: flex;
+            align-items: center;
+
+            gap: 12px;
+
+            padding: 12px 14px;
+
+            color: #dbeafe;
+
+            border-radius: 10px;
+
+            font-size: 14px;
+
+            transition: all 0.2s ease;
+        }
+
+        .menu a:hover,
+        .menu a.active {
+            background: rgba(255, 255, 255, 0.12);
+
+            color: white;
+        }
+
+        .menu-icon {
+            width: 20px;
+
+            text-align: center;
+
+            font-size: 16px;
+        }
+
+        .sidebar-bottom {
+            margin-top: auto;
+
+            border-top: 1px solid
+                rgba(255, 255, 255, 0.12);
+
+            padding-top: 18px;
+        }
+
+        .admin-mini {
+            display: flex;
+            align-items: center;
+
+            gap: 10px;
+
+            padding: 10px 12px;
+
+            margin-bottom: 10px;
+        }
+
+        .avatar {
+            width: 38px;
+            height: 38px;
+
+            border-radius: 50%;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #60a5fa,
+                    #818cf8
+                );
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            color: white;
+
+            font-weight: 700;
+
+            flex-shrink: 0;
+        }
+
+        .admin-info {
+            min-width: 0;
+        }
+
+        .admin-info strong {
+            display: block;
+
+            font-size: 13px;
+
+            white-space: nowrap;
+
+            overflow: hidden;
+
+            text-overflow: ellipsis;
+        }
+
+        .admin-info span {
+            display: block;
+
+            color: #bfdbfe;
+
+            font-size: 11px;
+
+            margin-top: 2px;
+        }
+
+        .logout-btn {
+            width: 100%;
+
+            border: 0;
+
+            background: rgba(255, 255, 255, 0.08);
+
+            color: #dbeafe;
+
+            padding: 10px;
+
+            border-radius: 9px;
+
+            cursor: pointer;
+
+            font-size: 13px;
+
+            transition: 0.2s;
+        }
+
+        .logout-btn:hover {
+            background: rgba(239, 68, 68, 0.25);
+
+            color: white;
+        }
+
+        /* =========================
+           MAIN
+        ========================== */
+
+        .main {
+            width: calc(100% - 260px);
+
+            margin-left: 260px;
+
+            min-height: 100vh;
+        }
+
+        /* =========================
+           TOPBAR
+        ========================== */
+
+        .topbar {
+            height: 72px;
+
+            background: white;
+
+            border-bottom: 1px solid #e2e8f0;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            padding: 0 35px;
+
+            position: sticky;
+
+            top: 0;
+
+            z-index: 50;
+        }
+
+        .topbar-left h1 {
+            font-size: 21px;
+
+            letter-spacing: -0.4px;
+        }
+
+        .topbar-left p {
+            color: #64748b;
+
+            font-size: 12px;
+
+            margin-top: 3px;
+        }
+
+        .topbar-right {
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+        }
+
+        .notification {
+            width: 40px;
+            height: 40px;
+
+            border: 1px solid #e2e8f0;
+
+            border-radius: 10px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            color: #475569;
+
+            background: white;
+        }
+
+        /* =========================
+           CONTENT
+        ========================== */
+
+        .content {
+            padding: 30px 35px;
+        }
+
+        /* =========================
+           WELCOME
+        ========================== */
+
+        .welcome {
+            position: relative;
+
+            overflow: hidden;
+
+            border-radius: 18px;
+
+            padding: 28px 30px;
+
+            color: white;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #2563eb,
+                    #4f46e5
+                );
+
+            margin-bottom: 25px;
+
+            box-shadow:
+                0 12px 30px
+                rgba(37, 99, 235, 0.15);
+        }
+
+        .welcome::before {
+            content: "";
+
+            position: absolute;
+
+            width: 240px;
+            height: 240px;
+
+            border-radius: 50%;
+
+            background:
+                rgba(255, 255, 255, 0.08);
+
+            right: -70px;
+            top: -110px;
+        }
+
+        .welcome::after {
+            content: "";
+
+            position: absolute;
+
+            width: 160px;
+            height: 160px;
+
+            border-radius: 50%;
+
+            background:
+                rgba(255, 255, 255, 0.06);
+
+            right: 120px;
+            bottom: -100px;
+        }
+
+        .welcome-content {
+            position: relative;
+
+            z-index: 1;
+        }
+
+        .welcome h2 {
+            font-size: 25px;
+
+            margin-bottom: 7px;
+        }
+
+        .welcome p {
+            color: #dbeafe;
+
+            font-size: 14px;
+        }
+
+        /* =========================
+           STATISTICS
+        ========================== */
+
+        .stats {
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 18px;
+
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: white;
+
+            border: 1px solid #e2e8f0;
+
+            border-radius: 15px;
+
+            padding: 20px;
+
+            transition: all 0.2s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 10px 25px
+                rgba(15, 23, 42, 0.06);
+        }
+
+        .stat-top {
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            margin-bottom: 16px;
+        }
+
+        .stat-icon {
+            width: 43px;
+            height: 43px;
+
+            border-radius: 11px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 19px;
+        }
+
+        .blue {
+            background: #eff6ff;
+            color: #2563eb;
+        }
+
+        .purple {
+            background: #f5f3ff;
+            color: #7c3aed;
+        }
+
+        .green {
+            background: #f0fdf4;
+            color: #16a34a;
+        }
+
+        .orange {
+            background: #fff7ed;
+            color: #ea580c;
+        }
+
+        .stat-label {
+            color: #64748b;
+
+            font-size: 12px;
+        }
+
+        .stat-number {
+            font-size: 27px;
+
+            font-weight: 800;
+
+            letter-spacing: -0.5px;
+        }
+
+        .stat-change {
+            font-size: 11px;
+
+            color: #16a34a;
+
+            margin-top: 5px;
+        }
+
+        /* =========================
+           GRID
+        ========================== */
+
+        .dashboard-grid {
+            display: grid;
+
+            grid-template-columns:
+                1.5fr 1fr;
+
+            gap: 20px;
+        }
+
+        .panel {
+            background: white;
+
+            border: 1px solid #e2e8f0;
+
+            border-radius: 15px;
+
+            overflow: hidden;
+        }
+
+        .panel-header {
+            padding: 20px 22px;
+
+            border-bottom: 1px solid #e2e8f0;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+        }
+
+        .panel-header h3 {
+            font-size: 16px;
+        }
+
+        .panel-header a {
+            color: #2563eb;
+
+            font-size: 12px;
+
+            font-weight: 600;
+        }
+
+        /* =========================
+           TABLE
+        ========================== */
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+
+            border-collapse: collapse;
+        }
+
+        th {
+            text-align: left;
+
+            padding: 13px 20px;
+
+            color: #64748b;
+
+            font-size: 11px;
+
+            text-transform: uppercase;
+
+            letter-spacing: 0.5px;
+
+            background: #f8fafc;
+        }
+
+        td {
+            padding: 14px 20px;
+
+            border-top: 1px solid #f1f5f9;
+
+            font-size: 13px;
+        }
+
+        .product-name {
+            font-weight: 600;
+
+            color: #1e293b;
+        }
+
+        .price {
+            font-weight: 700;
+
+            color: #2563eb;
+        }
+
+        .badge {
+            display: inline-block;
+
+            padding: 5px 9px;
+
+            border-radius: 20px;
+
+            font-size: 10px;
+
+            font-weight: 700;
+        }
+
+        .badge-success {
+            background: #dcfce7;
+
+            color: #166534;
+        }
+
+        .badge-warning {
+            background: #fef3c7;
+
+            color: #92400e;
+        }
+
+        /* =========================
+           QUICK ACTION
+        ========================== */
+
+        .quick-actions {
+            padding: 20px;
+
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 12px;
+        }
+
+        .action {
+            padding: 18px;
+
+            border: 1px solid #e2e8f0;
+
+            border-radius: 12px;
+
+            color: #334155;
+
+            transition: 0.2s;
+
+            background: white;
+        }
+
+        .action:hover {
+            border-color: #93c5fd;
+
+            background: #eff6ff;
+
+            transform: translateY(-1px);
+        }
+
+        .action-icon {
+            width: 38px;
+            height: 38px;
+
+            border-radius: 10px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            background: #eff6ff;
+
+            color: #2563eb;
+
+            margin-bottom: 10px;
+
+            font-size: 17px;
+        }
+
+        .action strong {
+            display: block;
+
+            font-size: 13px;
+
+            margin-bottom: 4px;
+        }
+
+        .action span {
+            font-size: 11px;
+
+            color: #64748b;
+        }
+
+        /* =========================
+           RESPONSIVE
+        ========================== */
+
+        @media (max-width: 1100px) {
+
+            .stats {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+        @media (max-width: 800px) {
+
+            .sidebar {
+                width: 70px;
+
+                padding: 20px 10px;
+            }
+
+            .brand {
+                font-size: 0;
+
+                text-align: center;
+
+                padding: 5px 0 30px;
+            }
+
+            .brand::after {
+                content: "IS";
+
+                font-size: 18px;
+            }
+
+            .menu-title,
+            .menu a span:not(.menu-icon),
+            .admin-info,
+            .logout-btn {
+                display: none;
+            }
+
+            .menu a {
+                justify-content: center;
+
+                padding: 12px;
+            }
+
+            .admin-mini {
+                justify-content: center;
+
+                padding: 5px;
+            }
+
+            .main {
+                width: calc(100% - 70px);
+
+                margin-left: 70px;
+            }
+
+            .topbar {
+                padding: 0 20px;
+            }
+
+            .content {
+                padding: 22px 20px;
+            }
+
+        }
+
+        @media (max-width: 600px) {
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .welcome {
+                padding: 24px 20px;
+            }
+
+            .welcome h2 {
+                font-size: 21px;
+            }
+
+            .topbar-left h1 {
+                font-size: 18px;
+            }
+
+            .topbar-left p {
+                display: none;
+            }
+
+            .content {
+                padding: 18px 14px;
+            }
+
+            .quick-actions {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+
+</head> <body> <div class="app">
+    <!-- =========================
+         SIDEBAR
+    ========================== -->
+
+    <aside class="sidebar">
+
+        <div class="brand">
+            IOTSTAR <span>SHOP</span>
+        </div>
+
+        <div class="menu-title">
+            Tổng quan
+        </div>
+
+        <nav class="menu">
+
+            <a href="/dashboard"
+               class="active">
+
+                <span class="menu-icon">▦</span>
+
+                <span>
+                Dashboard
+            </span>
+
+            </a>
+
+            <a href="/users">
+
+                <span class="menu-icon">♙</span>
+
+                <span>
+                Người dùng
+            </span>
+
+            </a>
+
+            <a href="/categories">
+
+                <span class="menu-icon">▤</span>
+
+                <span>
+                Danh mục
+            </span>
+
+            </a>
+
+            <a href="/products">
+
+                <span class="menu-icon">▣</span>
+
+                <span>
+                Sản phẩm
+            </span>
+
+            </a>
+
+        </nav>
+
+        <div class="menu-title"
+             style="margin-top: 28px;">
+
+            Hệ thống
+        </div>
+
+        <nav class="menu">
+
+            <a href="#">
+
+                <span class="menu-icon">⚙</span>
+
+                <span>
+                Cài đặt
+            </span>
+
+            </a>
+
+        </nav>
+
+        <!-- SIDEBAR BOTTOM -->
+
+        <div class="sidebar-bottom">
+
+            <div class="admin-mini">
+
+                <div class="avatar">
+
+                <span
+                        th:text="${#strings.substring(
+                        #authentication.name,
+                        0,
+                        1
+                    ).toUpperCase()}">
+                    A
+                </span>
+
+                </div>
+
+                <div class="admin-info">
+
+                    <strong
+                            th:text="${#authentication.name}">
+                        admin@gmail.com
+                    </strong>
+
+                    <span>
+                    Administrator
+                </span>
+
+                </div>
+
+            </div>
+
+            <!-- LOGOUT -->
+
+            <form method="post"
+                  th:action="@{/logout}">
+
+                <button
+                        type="submit"
+                        class="logout-btn">
+
+                    ↪ &nbsp; Đăng xuất
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </aside>
+
+    <!-- =========================
+         MAIN
+    ========================== -->
+
+    <main class="main">
+
+        <!-- TOPBAR -->
+
+        <header class="topbar">
+
+            <div class="topbar-left">
+
+                <h1>
+                    Dashboard
+                </h1>
+
+                <p>
+                    Quản lý và theo dõi hệ thống
+                </p>
+
+            </div>
+
+            <div class="topbar-right">
+
+                <div class="notification">
+                    🔔
+                </div>
+
+                <div class="avatar">
+
+                <span
+                        th:text="${#strings.substring(
+                        #authentication.name,
+                        0,
+                        1
+                    ).toUpperCase()}">
+                    A
+                </span>
+
+                </div>
+
+            </div>
+
+        </header>
+
+        <!-- CONTENT -->
+
+        <div class="content">
+
+            <!-- WELCOME -->
+
+            <section class="welcome">
+
+                <div class="welcome-content">
+
+                    <h2>
+                        Xin chào,
+                        <span
+                                th:text="${#authentication.name}">
+                        Admin
+                    </span>
+                        👋
+                    </h2>
+
+                    <p>
+                        Chào mừng bạn quay trở lại
+                        hệ thống quản trị IOTSTAR SHOP.
+                    </p>
+
+                </div>
+
+            </section>
+
+            <!-- STATISTICS -->
+
+            <section class="stats">
+
+                <div class="stat-card">
+
+                    <div class="stat-top">
+
+                        <div>
+
+                            <div class="stat-label">
+                                Người dùng
+                            </div>
+
+                            <div class="stat-number">
+                                128
+                            </div>
+
+                        </div>
+
+                        <div class="stat-icon blue">
+                            ♙
+                        </div>
+
+                    </div>
+
+                    <div class="stat-change">
+                        ↑ 12% tháng này
+                    </div>
+
+                </div>
+
+                <div class="stat-card">
+
+                    <div class="stat-top">
+
+                        <div>
+
+                            <div class="stat-label">
+                                Sản phẩm
+                            </div>
+
+                            <div class="stat-number">
+                                256
+                            </div>
+
+                        </div>
+
+                        <div class="stat-icon purple">
+                            ▣
+                        </div>
+
+                    </div>
+
+                    <div class="stat-change">
+                        ↑ 8% tháng này
+                    </div>
+
+                </div>
+
+                <div class="stat-card">
+
+                    <div class="stat-top">
+
+                        <div>
+
+                            <div class="stat-label">
+                                Danh mục
+                            </div>
+
+                            <div class="stat-number">
+                                24
+                            </div>
+
+                        </div>
+
+                        <div class="stat-icon green">
+                            ▤
+                        </div>
+
+                    </div>
+
+                    <div class="stat-change">
+                        ↑ 4% tháng này
+                    </div>
+
+                </div>
+
+                <div class="stat-card">
+
+                    <div class="stat-top">
+
+                        <div>
+
+                            <div class="stat-label">
+                                Đơn hàng
+                            </div>
+
+                            <div class="stat-number">
+                                86
+                            </div>
+
+                        </div>
+
+                        <div class="stat-icon orange">
+                            ◫
+                        </div>
+
+                    </div>
+
+                    <div class="stat-change">
+                        ↑ 15% tháng này
+                    </div>
+
+                </div>
+
+            </section>
+
+            <!-- LOWER GRID -->
+
+            <section class="dashboard-grid">
+
+                <!-- RECENT PRODUCTS -->
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <h3>
+                            Sản phẩm gần đây
+                        </h3>
+
+                        <a href="/products">
+                            Xem tất cả →
+                        </a>
+
+                    </div>
+
+                    <div class="table-wrapper">
+
+                        <table>
+
+                            <thead>
+
+                            <tr>
+
+                                <th>
+                                    Sản phẩm
+                                </th>
+
+                                <th>
+                                    Giá
+                                </th>
+
+                                <th>
+                                    Trạng thái
+                                </th>
+
+                            </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                            <tr>
+
+                                <td class="product-name">
+                                    Laptop Dell
+                                </td>
+
+                                <td class="price">
+                                    15.500.000 ₫
+                                </td>
+
+                                <td>
+
+                                <span class="badge badge-success">
+                                    Còn hàng
+                                </span>
+
+                                </td>
+
+                            </tr>
+
+                            <tr>
+
+                                <td class="product-name">
+                                    iPhone 16
+                                </td>
+
+                                <td class="price">
+                                    22.000.000 ₫
+                                </td>
+
+                                <td>
+
+                                <span class="badge badge-success">
+                                    Còn hàng
+                                </span>
+
+                                </td>
+
+                            </tr>
+
+                            <tr>
+
+                                <td class="product-name">
+                                    AirPods Pro
+                                </td>
+
+                                <td class="price">
+                                    5.990.000 ₫
+                                </td>
+
+                                <td>
+
+                                <span class="badge badge-warning">
+                                    Sắp hết
+                                </span>
+
+                                </td>
+
+                            </tr>
+
+                            <tr>
+
+                                <td class="product-name">
+                                    Samsung Galaxy
+                                </td>
+
+                                <td class="price">
+                                    18.500.000 ₫
+                                </td>
+
+                                <td>
+
+                                <span class="badge badge-success">
+                                    Còn hàng
+                                </span>
+
+                                </td>
+
+                            </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+                <!-- QUICK ACTIONS -->
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <h3>
+                            Thao tác nhanh
+                        </h3>
+
+                    </div>
+
+                    <div class="quick-actions">
+
+                        <a href="/products"
+                           class="action">
+
+                            <div class="action-icon">
+                                ＋
+                            </div>
+
+                            <strong>
+                                Quản lý sản phẩm
+                            </strong>
+
+                            <span>
+                            Thêm và chỉnh sửa sản phẩm
+                        </span>
+
+                        </a>
+
+                        <a href="/categories"
+                           class="action">
+
+                            <div class="action-icon">
+                                ▤
+                            </div>
+
+                            <strong>
+                                Danh mục
+                            </strong>
+
+                            <span>
+                            Quản lý danh mục sản phẩm
+                        </span>
+
+                        </a>
+
+                        <a href="/users"
+                           class="action">
+
+                            <div class="action-icon">
+                                ♙
+                            </div>
+
+                            <strong>
+                                Người dùng
+                            </strong>
+
+                            <span>
+                            Quản lý tài khoản
+                        </span>
+
+                        </a>
+
+                        <a href="#"
+                           class="action">
+
+                            <div class="action-icon">
+                                ⚙
+                            </div>
+
+                            <strong>
+                                Cài đặt
+                            </strong>
+
+                            <span>
+                            Cấu hình hệ thống
+                        </span>
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </div>
+
+    </main>
+
+</div> </body> </html>
