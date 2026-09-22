@@ -20,14 +20,15 @@ public class CustomUserDetailsService
 
     @Override
     public UserDetails loadUserByUsername(
-            String email
+            String identifier
     ) throws UsernameNotFoundException {
 
         User user = userRepository
-                .findByEmailWithRole(email)
+                .findByUsernameOrEmailWithRole(identifier.trim())
                 .orElseThrow(() ->
                         new UsernameNotFoundException(
-                                "Không tìm thấy tài khoản."
+                                "Không tìm thấy tài khoản: "
+                                        + identifier
                         )
                 );
 
@@ -36,7 +37,7 @@ public class CustomUserDetailsService
 
         SimpleGrantedAuthority authority =
                 new SimpleGrantedAuthority(
-                        "ROLE_" + roleName
+                        "ROLE_" + roleName.toUpperCase()
                 );
 
         return new CustomUserDetails(

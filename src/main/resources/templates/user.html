@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="vi"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>User</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f1f5f9;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 80px auto;
+            background: white;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,.08);
+        }
+
+        h1 {
+            color: #2563eb;
+        }
+
+        .logout {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: #dc2626;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>👤 Trang User</h1>
+
+    <p>
+        Bạn đang đăng nhập với quyền <b>USER</b>.
+    </p>
+
+    <p>
+        Đây là khu vực dành cho người dùng.
+    </p>
+
+    <form th:action="@{/logout}"
+          method="post">
+
+        <button class="logout"
+                type="submit">
+            Đăng xuất
+        </button>
+
+    </form>
+
+</div>
+
+</body>
+</html>

@@ -14,7 +14,6 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-
         return new BCryptPasswordEncoder();
     }
 
@@ -24,65 +23,89 @@ public class SecurityConfig {
     ) throws Exception {
 
         http
-
-                // ============================
-                // AUTHORIZATION
-                // ============================
                 .authorizeHttpRequests(auth -> auth
 
-                        // Public
+                        // =========================
+                        // PUBLIC
+                        // =========================
                         .requestMatchers(
                                 "/",
                                 "/login",
                                 "/error",
+                                "/access-denied",
                                 "/css/**",
                                 "/images/**"
                         ).permitAll()
 
+                        // =========================
                         // ADMIN
+                        // =========================
                         .requestMatchers(
+                                "/admin/**",
                                 "/dashboard",
                                 "/users/**"
                         ).hasRole("ADMIN")
 
-                        // LOGIN REQUIRED
+                        // =========================
+                        // USER
+                        // =========================
+                        .requestMatchers(
+                                "/user/**"
+                        ).hasRole("USER")
+
+                        // =========================
+                        // OTHER AUTHENTICATED
+                        // =========================
                         .requestMatchers(
                                 "/categories/**",
                                 "/products/**"
                         ).authenticated()
 
-                        // Everything else
                         .anyRequest().authenticated()
                 )
 
-                // ============================
-                // FORM LOGIN
-                // ============================
+                // =========================
+                // LOGIN
+                // =========================
                 .formLogin(form -> form
 
                         .loginPage("/login")
 
                         .loginProcessingUrl("/login")
 
-                        .usernameParameter("email")
+                        // Tên input trong HTML
+                        .usernameParameter("identifier")
 
                         .passwordParameter("password")
 
-                        .defaultSuccessUrl(
-                                "/dashboard",
-                                true
-                        )
+                        // Sau login:
+                        // USER -> /user
+                        // ADMIN -> /admin
+                        .successHandler((request, response, authentication) -> {
 
-                        .failureUrl(
-                                "/login?error=true"
-                        )
+                            boolean isAdmin =
+                                    authentication.getAuthorities()
+                                            .stream()
+                                            .anyMatch(
+                                                    a -> a.getAuthority()
+                                                            .equals("ROLE_ADMIN")
+                                            );
+
+                            if (isAdmin) {
+                                response.sendRedirect("/admin");
+                            } else {
+                                response.sendRedirect("/user");
+                            }
+                        })
+
+                        .failureUrl("/login?error=true")
 
                         .permitAll()
                 )
 
-                // ============================
+                // =========================
                 // LOGOUT
-                // ============================
+                // =========================
                 .logout(logout -> logout
 
                         .logoutUrl("/logout")
@@ -98,9 +121,9 @@ public class SecurityConfig {
                         .permitAll()
                 )
 
-                // ============================
+                // =========================
                 // ACCESS DENIED
-                // ============================
+                // =========================
                 .exceptionHandling(exception ->
                         exception.accessDeniedPage(
                                 "/access-denied"

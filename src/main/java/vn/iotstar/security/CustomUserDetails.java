@@ -11,6 +11,7 @@ import java.util.Collection;
 public class CustomUserDetails implements UserDetails {
 
     private final Long id;
+    private final String username;
     private final String email;
     private final String fullName;
     private final String password;
@@ -23,6 +24,7 @@ public class CustomUserDetails implements UserDetails {
     ) {
 
         this.id = user.getId();
+        this.username = user.getUsername();
         this.email = user.getEmail();
         this.fullName = user.getFullName();
         this.password = user.getPassword();
@@ -31,45 +33,44 @@ public class CustomUserDetails implements UserDetails {
     }
 
     @Override
-    public Collection<? extends GrantedAuthority>
-    getAuthorities() {
-
+    public Collection<? extends GrantedAuthority> getAuthorities() {
         return authorities;
     }
 
     @Override
     public String getPassword() {
-
         return password;
     }
 
     @Override
     public String getUsername() {
-
-        return email;
+        /*
+         * Spring Security cần một giá trị định danh.
+         * Ở đây trả về username nếu có,
+         * nếu không thì trả về email.
+         */
+        return username != null && !username.isBlank()
+                ? username
+                : email;
     }
 
     @Override
     public boolean isAccountNonExpired() {
-
         return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-
         return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-
         return true;
     }
 
     @Override
     public boolean isEnabled() {
-
         return enabled;
     }
 }

@@ -55,7 +55,7 @@ public class DataInitializer {
                             );
 
             // ============================
-            // ADMIN ACCOUNT
+            // ADMIN
             // ============================
 
             if (!userRepository
@@ -63,10 +63,10 @@ public class DataInitializer {
 
                 User admin = new User();
 
+                admin.setUsername("admin");
+
                 admin.setEmail(
-                        adminEmail
-                                .trim()
-                                .toLowerCase()
+                        adminEmail.trim().toLowerCase()
                 );
 
                 admin.setPassword(
@@ -84,6 +84,37 @@ public class DataInitializer {
                 admin.setRole(adminRole);
 
                 userRepository.save(admin);
+            }
+
+            // ============================
+            // USER
+            // ============================
+
+            String userEmail = "user@gmail.com";
+            String userPassword = "123456";
+
+            if (!userRepository
+                    .existsByEmailIgnoreCase(userEmail)) {
+
+                User user = new User();
+
+                user.setUsername("user");
+
+                user.setEmail(userEmail);
+
+                user.setPassword(
+                        passwordEncoder.encode(
+                                userPassword
+                        )
+                );
+
+                user.setFullName("Normal User");
+
+                user.setEnabled(true);
+
+                user.setRole(userRole);
+
+                userRepository.save(user);
             }
         };
     }

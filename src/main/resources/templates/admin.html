@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="vi"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Admin</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #0f172a;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 80px auto;
+            background: white;
+            padding: 40px;
+            border-radius: 16px;
+        }
+
+        h1 {
+            color: #dc2626;
+        }
+
+        .logout {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: #dc2626;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>🛡️ Trang Admin</h1>
+
+    <p>
+        Bạn đang đăng nhập với quyền <b>ADMIN</b>.
+    </p>
+
+    <p>
+        Đây là khu vực quản trị hệ thống.
+    </p>
+
+    <form th:action="@{/logout}"
+          method="post">
+
+        <button class="logout"
+                type="submit">
+            Đăng xuất
+        </button>
+
+    </form>
+
+</div>
+
+</body>
+</html>
